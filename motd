@@ -1,0 +1,42 @@
+FreeBSD 12.1-STABLE r360721 GENERIC 
+
+------------------------------------------------------------------------------
+
+    ###########                                       ############
+   #           #                                     #            #
+  #             #                 #                 #              #
+  #              #               # #               #               #
+  #               #             #   #             #                #
+   #               #           #     #           #                #
+    ################          #       #         ##################
+                     #       #         #       #
+                      #     #           #     #
+                       #   #             #   #      
+                        # #               # # 
+                         #                 #
+
+                            Paul W Poteete
+
+Security:
+	/root/.ssh contains ssh auth/keys
+	/etc/ssh/sshd_config allows root password authentication
+	/etc/rc.conf NFS server and clients enabled
+	/etc/exports are WIDE open for nfs (rw) access to /mnt
+Modifications:
+	installed vim
+	installed bash
+	installed bash-completion
+	installed nmap
+	installed iperf
+	installed john
+	installed rsync
+	/etc/motd.original contains the original login announcement.
+	/root/.bashrc has special prompt modifications.
+	/root/.vimrc has special options (blowfish2 as default)
+	/etc/rc.conf has special options (be aware of these options)
+	/boot/msdos/config.txt set arm_freq to 900 #1200 for RPi3
+	/etc/sysctl.conf set dev.cpu.0.freq=900 #1200 for RPi3
+	[reboot should require 45-60 seconds]
+
+------------------------------------------------------------------------------
+
