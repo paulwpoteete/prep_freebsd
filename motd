@@ -32,12 +32,21 @@ Modifications:
 	installed curl
 	installed wget
 	installed git
+	installed inxi
 	/etc/motd.original contains the original login announcement.
 	/root/.bashrc has special prompt modifications.
 	/root/.vimrc has special options (blowfish2 as default)
 	/etc/rc.conf has special options (be aware of these options)
 	/boot/msdos/config.txt set arm_freq to 900 #1200 for RPi3
-	/etc/sysctl.conf set dev.cpu.0.freq=900 #1200 for RPi3
+Optional Overclocking:
+	/etc/sysctl.conf #Instead of altering config.txt (config.txt is better)
+		dev.cpu.0.freq=900 #1200 for RPi3
+	/etc/msdos/config.txt
+		arm_freq=1000
+		core_freq=500
+		sdram_freq=600
+		over_voltage=6
+
 	[reboot should require 45-60 seconds]
 
 ------------------------------------------------------------------------------
