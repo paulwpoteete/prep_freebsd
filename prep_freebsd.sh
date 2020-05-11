@@ -24,9 +24,9 @@ fi
 echo -e "\n\n\n\033[1m\e[92mWell then... Let's get started!!!\033[0m\n\n"
 sleep 1
 
-echo -e "\n\033[1mInstalling base tools...\033[0m"
+echo -e "\n\033[1mInstalling base tools...(100-300 minutes)\033[0m"
 pkg install -y wget
-pkg install -y rsync john iperf p5-Bash-Completion-0.008_1 vim glusterfs-3.11.1_6
+pkg install -y git rsync john iperf p5-Bash-Completion-0.008_1 vim glusterfs-3.11.1_6
 
 echo -e "\n\033[1mChecking Script Run Status...\033[0m"
 if [ -f /etc/rc.conf.original ]
@@ -50,6 +50,7 @@ cp -rvp /etc/rc.conf /etc/rc.conf.original
 	var_iface=`ifconfig -a | grep "^[a-z]" | grep -v lo | awk -F":" '{ print $1 }'`
 	sed -i -e s/DEFAULT\=\"DHCP\"/$var_iface\=\"inet\ 192.168.1.199\ netmask\ 255.255.255.0\"/g /etc/rc.conf
 	echo 
+	echo 'defaultrouter=192.168.1.1' >> /etc/rc.conf
 	echo '' >> /etc/rc.conf
 	echo '### Disable IPv6' >> /etc/rc.conf
 	echo 'ipv6_enable="NO"' >> /etc/rc.conf

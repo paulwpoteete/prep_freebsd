@@ -29,6 +29,9 @@ Modifications:
 	installed iperf
 	installed john
 	installed rsync
+	installed curl
+	installed wget
+	installed git
 	/etc/motd.original contains the original login announcement.
 	/root/.bashrc has special prompt modifications.
 	/root/.vimrc has special options (blowfish2 as default)
