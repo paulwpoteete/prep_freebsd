@@ -51,7 +51,7 @@ cp -rvp /etc/rc.conf /etc/rc.conf.original
 	var_iface=`ifconfig -a | grep "^[a-z]" | grep -v lo | awk -F":" '{ print $1 }'`
 	sed -i -e s/DEFAULT\=\"DHCP\"/$var_iface\=\"inet\ 192.168.1.199\ netmask\ 255.255.255.0\"/g /etc/rc.conf
 	#compensate for AtomicPi Boards and other installations of FreeBSD
-	sed -i -e s/ifconfig_$var_iface\=\"DHCP\"/$var_iface\=\"inet\ 192.168.1.199\ netmask\ 255.255.255.0\"/g /etc/rc.conf
+	sed -i -e s/ifconfig_$var_iface\=\"DHCP\"/ifconfig_$var_iface\=\"inet\ 192.168.1.199\ netmask\ 255.255.255.0\"/g /etc/rc.conf
 	echo 
 	echo 'defaultrouter=192.168.1.1' >> /etc/rc.conf
 	echo '' >> /etc/rc.conf
@@ -74,15 +74,9 @@ cp -rvp /etc/exports /etc/exports.original
 	echo '# Very liberal allowance for access to /mnt' >> /etc/exports
 	echo '/mnt -maproot=nobody -alldirs -public' >> /etc/exports
 
-cp -rvp /boot/msdos/config.txt /boot/msdos/config.txt.original
-	echo 'arm_freq=900' >> /boot/msdos/config.txt
-
-cp -rvp /etc/sysctl.conf /etc/sysctl.conf.original
-	echo "dev.cpu.0.freq=900" >> /etc/sysctl.conf
 cp -rvp /etc/ssh/sshd_config /etc/ssh/sshd_config.original
 	echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 cp -rvp /etc/motd /etc/motd.original
-#	wget -O /etc/motd https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/motd
 	curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/motd > /etc/motd
 
 mv /etc/hosts /etc/hosts.original
@@ -93,16 +87,22 @@ cp -rvp /boot/loader.conf /boot/loader.conf.original
 
 
 echo -e "\n\033[1mUpdating the bash prompt and vimrc...\033[0m"
-#wget -O /root/.bashrc https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc > /root/.bashrc
 	if [ ! -f  /root/.bash_profile ] ; then ln -s /root/.bashrc /root/.bash_profile ; fi
-#wget -O /home/freebsd/.bashrc https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc > /home/freebsd/.bashrc
 	if [ ! -f  /home/freebsd/.bash_profile ] ; then ln -s /home/freebsd/.bashrc /home/freebsd/.bash_profile ; fi
-#wget -O /root/.vimrc https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /root/.vimrc
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /home/freebsd/.vimrc
 
+###Raspberry Pi 2 Tweaks:
+var_atomic=`/usr/local/bin/inxi -M | grep -c AAEON`
+if [ $var_atomic -ge '1' ]
+then
+	cp -rvp /boot/msdos/config.txt /boot/msdos/config.txt.original
+	echo 'arm_freq=900' >> /boot/msdos/config.txt
+	cp -rvp /etc/sysctl.conf /etc/sysctl.conf.original
+	echo "dev.cpu.0.freq=900" >> /etc/sysctl.conf
+fi
 
 chsh -s /usr/local/bin/bash root
 chsh -s /usr/local/bin/bash freebsd
