@@ -1,10 +1,10 @@
 #!/bin/bash
 # 20200509_PWP
 # Configure an Ubuntu 20.04 RPi 3 for Production use
+# 20200601.1404 PWP - Modifications for Atomic Pi and other apps
+
 clear
-printf "\n\nThis script will autoconfigure a RPi 3 for production use.\n"
 echo "These options are entirely based on my opinion, and may or may not be suitable for your particular needs."
-echo "(This process will remove netplan and snapd)"
 echo -e "\033[4mThere is no warranty of any kind.\033[0m"
 echo '
 Copyright 2020 Paul W. Poteete
@@ -26,7 +26,8 @@ sleep 1
 
 echo -e "\n\033[1mInstalling base tools...(100-300 minutes)\033[0m"
 pkg install -y wget
-pkg install -y git rsync john iperf p5-Bash-Completion-0.008_1 vim glusterfs-3.11.1_6
+for app in git nginx py37-certbot npm node rsync john iperf p5-Bash-Completion-0.008_1 vim iftop htop dmidecode ; do pkg install -y $app; done
+wget -O /usr/local/bin/inxi https://github.com/smxi/inxi/raw/master/inxi ; chmod 775 /usr/local/bin/inxi
 
 echo -e "\n\033[1mChecking Script Run Status...\033[0m"
 if [ -f /etc/rc.conf.original ]
@@ -49,6 +50,8 @@ echo -e "\n\n\033[1mBacking up and Replacing configuration files...\033[0m"
 cp -rvp /etc/rc.conf /etc/rc.conf.original
 	var_iface=`ifconfig -a | grep "^[a-z]" | grep -v lo | awk -F":" '{ print $1 }'`
 	sed -i -e s/DEFAULT\=\"DHCP\"/$var_iface\=\"inet\ 192.168.1.199\ netmask\ 255.255.255.0\"/g /etc/rc.conf
+	#compensate for AtomicPi Boards and other installations of FreeBSD
+	sed -i -e s/ifconfig_$var_iface\=\"DHCP\"/$var_iface\=\"inet\ 192.168.1.199\ netmask\ 255.255.255.0\"/g /etc/rc.conf
 	echo 
 	echo 'defaultrouter=192.168.1.1' >> /etc/rc.conf
 	echo '' >> /etc/rc.conf
@@ -79,23 +82,32 @@ cp -rvp /etc/sysctl.conf /etc/sysctl.conf.original
 cp -rvp /etc/ssh/sshd_config /etc/ssh/sshd_config.original
 	echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 cp -rvp /etc/motd /etc/motd.original
-#	wget -O /etc/motd http://public.cybernados.net/pub/prep_freebsd/motd
-	curl -s http://public.cybernados.net/pub/prep_freebsd/motd > /etc/motd
+#	wget -O /etc/motd https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/motd
+	curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/motd > /etc/motd
+
+mv /etc/hosts /etc/hosts.original
+echo -e "::1\t\tlocalhost localhost.my.domain\n127.0.0.1\tlocalhost localhost.localdomain\n127.0.1.1\tvault.cybernados.net vault\n127.0.0.1\tcybvlt01.cybernados.net cybvlt01\n" > /etc/hosts
+
+cp -rvp /boot/loader.conf /boot/loader.conf.original
+	echo -e "hint.uart.0.disabled=\"1\"\nhint.uart.1.disabled=\"1\"\nvfs.zfs.prefetch_disable=\"0\"" >> /boot/loader.conf
+
 
 echo -e "\n\033[1mUpdating the bash prompt and vimrc...\033[0m"
-#wget -O /root/.bashrc http://public.cybernados.net/pub/prep_freebsd/bashrc
-curl -s http://public.cybernados.net/pub/prep_freebsd/bashrc > /root/.bashrc
+#wget -O /root/.bashrc https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc
+curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc > /root/.bashrc
 	if [ ! -f  /root/.bash_profile ] ; then ln -s /root/.bashrc /root/.bash_profile ; fi
-#wget -O /home/freebsd/.bashrc http://public.cybernados.net/pub/prep_freebsd/bashrc
-curl -s http://public.cybernados.net/pub/prep_freebsd/bashrc > /home/freebsd/.bashrc
+#wget -O /home/freebsd/.bashrc https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc
+curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc > /home/freebsd/.bashrc
 	if [ ! -f  /home/freebsd/.bash_profile ] ; then ln -s /home/freebsd/.bashrc /home/freebsd/.bash_profile ; fi
-#wget -O /root/.vimrc http://public.cybernados.net/pub/prep_freebsd/vimrc
-curl -s http://public.cybernados.net/pub/prep_freebsd/vimrc > /root/.vimrc
-curl -s http://public.cybernados.net/pub/prep_freebsd/vimrc > /home/freebsd/.vimrc
+#wget -O /root/.vimrc https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/vimrc
+curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/vimrc > /root/.vimrc
+curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/vimrc > /home/freebsd/.vimrc
 
 
 chsh -s /usr/local/bin/bash root
 chsh -s /usr/local/bin/bash freebsd
+
+/usr/local/bin/inxi -F
 
 printf "\n\nConfiguration Complete.\nThe new IP address upon reboot will be 192.168.1.199\nIf you wish to change this, edit the /etc/rc.conf file now...\n\n"
 exit 0
