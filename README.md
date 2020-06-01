@@ -3,7 +3,7 @@ Automate the Configuration of FreeBSD 12 on a Raspberry Pi 3x
 
 On your RPi...
 
-1) Login (atomic pi installation video, login as root)
+1) Login (atomic pi installation video, #login as root)
 	# Username=freebsd
 	# Password=freebsd
 2) Become root
@@ -11,7 +11,7 @@ On your RPi...
 	# Password=root
 3) pkg install -y bash curl
 4) bash
-5) bash -c "$(curl https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/prep_freebsd.sh)"
+5) bash -c "$(curl https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/prep_freebsd.sh)"
 
 Images for FreeBSD can be found here:
 32bit Pi2:
