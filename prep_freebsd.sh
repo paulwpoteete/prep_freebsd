@@ -82,8 +82,8 @@ cp -rvp /etc/sysctl.conf /etc/sysctl.conf.original
 cp -rvp /etc/ssh/sshd_config /etc/ssh/sshd_config.original
 	echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 cp -rvp /etc/motd /etc/motd.original
-#	wget -O /etc/motd https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/motd
-	curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/motd > /etc/motd
+#	wget -O /etc/motd https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/motd
+	curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/motd > /etc/motd
 
 mv /etc/hosts /etc/hosts.original
 echo -e "::1\t\tlocalhost localhost.my.domain\n127.0.0.1\tlocalhost localhost.localdomain\n127.0.1.1\tvault.cybernados.net vault\n127.0.0.1\tcybvlt01.cybernados.net cybvlt01\n" > /etc/hosts
@@ -93,15 +93,15 @@ cp -rvp /boot/loader.conf /boot/loader.conf.original
 
 
 echo -e "\n\033[1mUpdating the bash prompt and vimrc...\033[0m"
-#wget -O /root/.bashrc https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc
-curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc > /root/.bashrc
+#wget -O /root/.bashrc https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc
+curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc > /root/.bashrc
 	if [ ! -f  /root/.bash_profile ] ; then ln -s /root/.bashrc /root/.bash_profile ; fi
-#wget -O /home/freebsd/.bashrc https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc
-curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/bashrc > /home/freebsd/.bashrc
+#wget -O /home/freebsd/.bashrc https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc
+curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc > /home/freebsd/.bashrc
 	if [ ! -f  /home/freebsd/.bash_profile ] ; then ln -s /home/freebsd/.bashrc /home/freebsd/.bash_profile ; fi
-#wget -O /root/.vimrc https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/vimrc
-curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/vimrc > /root/.vimrc
-curl -s https://github.com/paulwpoteete/prep_freebsd/raw/master/prep_freebsd/vimrc > /home/freebsd/.vimrc
+#wget -O /root/.vimrc https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc
+curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /root/.vimrc
+curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /home/freebsd/.vimrc
 
 
 chsh -s /usr/local/bin/bash root
