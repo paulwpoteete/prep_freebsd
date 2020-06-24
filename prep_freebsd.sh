@@ -28,7 +28,7 @@ sleep 1
 
 echo -e "\n\033[1mInstalling base tools...(100-300 minutes)\033[0m"
 pkg install -y wget
-for app in git nginx npm node rsync john iperf bash-completion vim iftop htop dmidecode ; do pkg install -y $app; done
+for app in git nginx npm node rsync john iperf bash-completion vim iftop lsblk htop dmidecode ; do pkg install -y $app; done
 
 ln -s /usr/local/bin/bash /bin/bash
 
