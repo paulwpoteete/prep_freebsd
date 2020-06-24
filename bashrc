@@ -31,12 +31,33 @@ alias logout='func_write && history >> ~/.history.save && logout'
 alias x='func_write && history >> ~/.history.save && \exit'
 alias exit='func_write && history >> ~/.history.save && exit'
 
-### Prompt
-PS1="\[\033[0;31m\]\[\342\224\214\342\224\200\]\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\[\342\234\227\]\[\033[0;37m\]]\[\342\224\200\]\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\[\342\224\200\][\[\033[0;32m\]\w\[\033[0;31m\]]\n\[\033[0;31m\]\[\342\224\224\342\224\200\342\224\200\342\225\274\] \[\033[0m\]\[\e[01;33m\]\\$ \[\e[0m\]"
+### Prompt Modifications Start ###
+#--------------------------------#
+# 20170828 Paul W. Poteete. Note: install net-tools for Linux distros that are misled.
+### Alternative Bash Prompt Command ###
+#PROMPT_COMMAND='echo -en "\e[2m\e[7m[Session Line:$LINENO Date:`date`]\n" '
 
-### Prompt Information: PWP_2017
-var_ip=`ifconfig -a | grep inet| grep -v ":|127.0.0.1" | awk '{ printf $2", " }' | rev | cut -c 3- | rev`
+#--------------------------------#
+### BSD/Linux Bash Prompt Command ###
+var_ip=`/sbin/ifconfig -a | grep inet| grep -v ":|127.0.0.1" | awk '{ printf $2", " }' | rev | cut -c 3- | rev`
 PROMPT_COMMAND='if [ ${EUID} == 0 ]; then echo -en "\e[49m\e[31m[Session Line:$LINENO Date:`date`\e[1m IP:$var_ip\e[0m\e[31m]\e[0m\n"; else echo -en "\e[100m\e[37m[Session Line:$LINENO Date:`date`\e[1m IP:$var_ip\e[0m\e[100m\e[37m]\e[0m\n" ; fi'
+var_system=`uname -s | grep -ic linux`
+#--------------------------------#
 
-### Alternative example
-### PROMPT_COMMAND='echo -en "\e[2m\e[7m[Session Line:$LINENO Date:`date`]\n" '
+#--------------------------------#
+if [ $var_system -eq '1' ]
+then
+	### Linux Bash Prompt ###
+PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;31m\]]\n\[\033[0;31m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]\[\e[01;33m\]\\$ \[\e[0m\]"
+
+	### Linux Bash Prompt Notes###
+	#sym1=\342\224\214 # up-right bracket
+	#sym2=\342\224\200 # straight line
+	#sym3=\342\224\224 # down-right bracket
+	#sym4=\342\225\274 # bulb-tip line
+else
+	### BSD Bash Prompt ###
+PS1="\[\033[0;31m\]+-\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]-\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]-[\[\033[0;32m\]\w\[\033[0;31m\]]\n\[\033[0;31m\]+-\[\033[0m\]\[\e[01;33m\]\\$ \[\e[0m\]"
+fi
+#--------------------------------#
+### Prompt Modifications Stop. ###
