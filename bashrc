@@ -40,7 +40,7 @@ alias exit='func_write && history >> ~/.history.save && exit'
 #--------------------------------#
 ### BSD/Linux Bash Prompt Command ###
 var_ip=`/sbin/ifconfig -a | grep inet| grep -v ":|127.0.0.1" | awk '{ printf $2", " }' | rev | cut -c 3- | rev`
-PROMPT_COMMAND='if [ ${EUID} == 0 ]; then echo -en "\e[49m\e[31m[Session Line:$LINENO Date:`date`\e[1m IP:$var_ip\e[0m\e[31m]\e[0m\n"; else echo -en "\e[100m\e[37m[Session Line:$LINENO Date:`date`\e[1m IP:$var_ip\e[0m\e[100m\e[37m]\e[0m\n" ; fi'
+PROMPT_COMMAND='if [ ${EUID} == 0 ]; then echo -en "\e[49m\e[31m[`uname -s` Line:$LINENO Date:`date`\e[1m IP:$var_ip\e[0m\e[31m]\e[0m\n"; else echo -en "\e[100m\e[37m[Session Line:$LINENO Date:`date`\e[1m IP:$var_ip\e[0m\e[100m\e[37m]\e[0m\n" ; fi'
 var_system=`uname -s | grep -ic linux`
 #--------------------------------#
 
