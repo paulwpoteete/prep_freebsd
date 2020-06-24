@@ -2,6 +2,7 @@
 # 20200509_PWP
 # Configure an Ubuntu 20.04 RPi 3 for Production use
 # 20200601.1404 PWP - Modifications for Atomic Pi and other apps
+# 20200624:1411 PWP - Updated
 
 clear
 echo "These options are entirely based on my opinion, and may or may not be suitable for your particular needs."
@@ -10,9 +11,10 @@ echo '
 Copyright 2020 Paul W. Poteete
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-'
-printf "\n\nOnly run this script as root, after running: pkg install -y bash curl && bash\n\n"
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.'
+
+printf "\n\n\n\033[1m\e[91mOnly run this script as root, after running: pkg install -y bash curl && bash\n\n\033[0m\n"
 printf "\n\n\nIf you wish to continue, type the lowercase letter y and press enter: "
 read var_agree
 if [ $var_agree != 'y' ]
@@ -26,7 +28,10 @@ sleep 1
 
 echo -e "\n\033[1mInstalling base tools...(100-300 minutes)\033[0m"
 pkg install -y wget
-for app in git nginx py37-certbot npm node rsync john iperf p5-Bash-Completion-0.008_1 vim iftop htop dmidecode ; do pkg install -y $app; done
+for app in git nginx npm node rsync john iperf bash-completion vim iftop htop dmidecode ; do pkg install -y $app; done
+
+ln -s /usr/local/bin/bash /bin/bash
+
 wget -O /usr/local/bin/inxi https://github.com/smxi/inxi/raw/master/inxi ; chmod 775 /usr/local/bin/inxi
 
 echo -e "\n\033[1mChecking Script Run Status...\033[0m"
@@ -85,7 +90,6 @@ echo -e "::1\t\tlocalhost localhost.my.domain\n127.0.0.1\tlocalhost localhost.lo
 cp -rvp /boot/loader.conf /boot/loader.conf.original
 	echo -e "hint.uart.0.disabled=\"1\"\nhint.uart.1.disabled=\"1\"\nvfs.zfs.prefetch_disable=\"0\"" >> /boot/loader.conf
 
-
 echo -e "\n\033[1mUpdating the bash prompt and vimrc...\033[0m"
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc > /root/.bashrc
 	if [ ! -f  /root/.bash_profile ] ; then ln -s /root/.bashrc /root/.bash_profile ; fi
@@ -95,6 +99,7 @@ curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /home/freebsd/.vimrc
 
 ###Raspberry Pi 2 Tweaks:
+### Atomic Pi Tweaks ###
 var_atomic=`/usr/local/bin/inxi -M | grep -c AAEON`
 if [ $var_atomic -ge '1' ]
 then
@@ -106,6 +111,12 @@ fi
 
 chsh -s /usr/local/bin/bash root
 chsh -s /usr/local/bin/bash freebsd
+
+echo -e "\n\033[1m\e[92mPlease install py37-certbot or py27-certbot-nginx-1.3.0\n033[0m\n\n"
+sleep 1
+
+ssh-keygen
+cat /root/.ssh/id_rsa.pub >> authorized_keys
 
 /usr/local/bin/inxi -F
 
