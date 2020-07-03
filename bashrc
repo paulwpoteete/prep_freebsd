@@ -3,12 +3,10 @@
 ###################################
 # These settings modify the bash prompt to allow for ease of use.
 # The options are written with ease of understanding in mind.
+PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 
 # If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+[ -z "$PS1" ] && return
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -35,17 +33,6 @@ force_color_prompt=yes
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
 
 ### Attempt to verify ownership after performing sudo operations
 ### Most commonly: .bash_history .viminfo .history.save
@@ -89,7 +76,7 @@ if [ $var_system -eq '1' ]
 then
 	### Linux PROMPT_COMMAND ###
 	var_date=`date +%a,%Y%m%d.%H%Mhrs`
-	var_ram=`free -h --si | grep Mem | awk '{ print $3 }'`
+	var_ram=`free -h --si | grep Mem | awk '{ print $4 }'`
 	var_ip=`/sbin/ifconfig -a | grep inet| grep -v ":|127.0.0.1" | awk '{ printf $2", " }' | rev | cut -c 3- | rev`
 	PROMPT_COMMAND='if [ ${EUID} == 0 ];
 	then echo -en "$rn[OS:`uname -s` Date:$var_date FreeRAM:"$var_ram" $rb\0IP:$var_ip$rn]\e[0m\n";
