@@ -127,6 +127,18 @@ PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0
 	#sym3=\342\224\224 # down-right bracket
 	#sym4=\342\225\274 # bulb-tip line
 else
+	alias ll='ls -lh --color'
+	alias grep='grep --color -E'
+	alias find='time find'
+	alias mv='mv -i'
+	alias cp='cp -i'
+	alias vi='vim'
+	alias dd='dd status=progress'
+	alias nmap='nmap --open'
+	alias logout='func_write ; history >> ~/.history.save && logout'
+	alias x='func_write ; history >> ~/.history.save && \exit'
+	alias exit='func_write ; history >> ~/.history.save && exit'
+
 	### BSD Bash Prompt ###
 PS1="\[\033[0;31m\]+-\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]-\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]root\[\033[01;33m\]@\[\033[01;96m\]\h'; else echo '\[\033[0;39m\]\u\[\033[01;33m\]@\[\033[01;96m\]\h'; fi)\[\033[0;31m\]]-[\[\033[0;32m\]\w\[\033[0;31m\]]\n\[\033[0;31m\]+-\[\033[0m\]\[\e[01;33m\]\\$ \[\e[0m\]"
 fi
