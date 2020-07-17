@@ -5,6 +5,13 @@
 # The options are written with ease of understanding in mind.
 PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 
+# Carryover from Default conf: enable programmable completion features (you don't need to enable
+if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+fi
+
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
