@@ -102,7 +102,7 @@ fi
 if [ $var_system -eq '1' ]
 then
 	### aliases for Debian-Based systems ###
-	alias ll='ls -lh --color --group-directories-first'
+	alias ll='ls -lha --color --group-directories-first'
 	alias grep='grep --color -E'
 	alias find='time find'
 	alias mv='mv -i'
@@ -127,7 +127,7 @@ PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0
 	#sym3=\342\224\224 # down-right bracket
 	#sym4=\342\225\274 # bulb-tip line
 else
-	alias ll='ls -lh --color'
+	alias ll='ls -lha --color'
 	alias grep='grep --color -E'
 	alias find='time find'
 	alias mv='mv -i'
