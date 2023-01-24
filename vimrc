@@ -8,6 +8,7 @@ set background=dark
 set cryptmethod=blowfish2
 
 """ Vim Functionality Options
+set spell spelllang=en_us
 set nocompatible
 set mouse=
 set ttymouse=
