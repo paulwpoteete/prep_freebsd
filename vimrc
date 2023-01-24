@@ -1,3 +1,5 @@
+" PWP 20040101
+
 """ Vim View Options
 syntax on
 set background=dark
