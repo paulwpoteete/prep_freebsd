@@ -63,6 +63,8 @@ curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashr
 	if [ ! -f  /root/.bash_profile ] ; then ln -s /root/.bashrc /root/.bash_profile ; fi
 	if [ -f  /root/.profile ] ; then mv /root/.profile /root/.profile.original && ln -s /root/.bashrc /root/.profile ; fi
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /root/.vimrc
+chsh -s /usr/local/bin/bash root
+
 
 if [ -d /home/student ]
 then
@@ -72,10 +74,8 @@ then
 	if [ ! -f  /home/student/.bash_profile ] ; then ln -s /home/student/.bashrc /home/student/.bash_profile ; fi
 	if [ -f  /home/student/.profile ] ; then mv /home/student/.profile /home/student/.profile.original && ln -s /home/student/.bashrc /home/student/.profile ; fi
 	curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /home/student/.vimrc
+	chsh -s /usr/local/bin/bash student
 fi
-
-chsh -s /usr/local/bin/bash root
-chsh -s /usr/local/bin/bash student
 
 ssh-keygen
 cat /root/.ssh/id_rsa.pub >> authorized_keys
