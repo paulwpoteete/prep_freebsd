@@ -26,7 +26,7 @@ sleep 1
 
 echo -e "\n\033[1mInstalling base tools...(100-300 minutes)\033[0m"
 pkg install -y wget
-for app in git rsync john iperf bash-completion vim iftop lsblk htop dmidecode inxi ; do pkg install -y $app; done
+for app in git rsync john iperf bash bash-completion vim iftop lsblk htop inxi ; do pkg install -y $app; done
 
 ln -s /usr/local/bin/bash /bin/bash
 
@@ -58,12 +58,24 @@ cp -rvp /etc/ssh/sshd_config /etc/ssh/sshd_config.original
 cp -rvp /etc/motd /etc/motd.original
 	curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/motd > /etc/motd
 
-echo -e "\n\033[1mUpdating the bash prompt and vimrc...\033[0m"
+echo -e "\n\033[1mUpdating the ROOT bash prompt and vimrc...\033[0m"
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc > /root/.bashrc
 	if [ ! -f  /root/.bash_profile ] ; then ln -s /root/.bashrc /root/.bash_profile ; fi
+	if [ -f  /root/.profile ] ; then mv /root/.profile /root/.profile.original && ln -s /root/.bashrc /root/.profile ; fi
 curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /root/.vimrc
 
+if [ -d /home/student ]
+then
+	echo "Student User Detected"
+	echo -e "\n\033[1mUpdating the STUDENT bash prompt and vimrc...\033[0m"
+	curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/bashrc > /home/student/.bashrc
+	if [ ! -f  /home/student/.bash_profile ] ; then ln -s /home/student/.bashrc /home/student/.bash_profile ; fi
+	if [ -f  /home/student/.profile ] ; then mv /home/student/.profile /home/student/.profile.original && ln -s /home/student/.bashrc /home/student/.profile ; fi
+	curl -s https://raw.githubusercontent.com/paulwpoteete/prep_freebsd/master/vimrc > /home/student/.vimrc
+fi
+
 chsh -s /usr/local/bin/bash root
+chsh -s /usr/local/bin/bash student
 
 ssh-keygen
 cat /root/.ssh/id_rsa.pub >> authorized_keys
