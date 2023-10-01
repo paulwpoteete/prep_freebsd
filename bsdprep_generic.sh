@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/bash
 # 20200509_PWP
 # 20230628.0009 PWP Generic Config for FreeBSD
 
